@@ -8,12 +8,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { Armchair } from "lucide-react";
 
 export const BookingPage = () => {
   const [selectedSeats, setSelectedSeats] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [isBooked, setIsBooked] = useState(false);
+
+  // This would typically come from your backend
+  const totalSeats = 200;
+  const availableSeats = 150;
 
   const handleBooking = () => {
     if (!selectedSeats || !selectedTime || !paymentMethod) {
@@ -42,93 +47,119 @@ export const BookingPage = () => {
 
   return (
     <div className="container mx-auto px-4">
-      <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
-        <h2 className="text-3xl font-bold text-ibm-dark mb-8 text-center">
-          Book Your Seat
-        </h2>
-
-        {!isBooked ? (
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Number of Seats
-              </label>
-              <Select onValueChange={setSelectedSeats}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select seats" />
-                </SelectTrigger>
-                <SelectContent>
-                  {[1, 2, 3, 4].map((num) => (
-                    <SelectItem key={num} value={num.toString()}>
-                      {num} {num === 1 ? "seat" : "seats"}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+      <div className="max-w-2xl mx-auto">
+        {/* Available Seats Card */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Armchair className="h-8 w-8 text-ibm-blue" />
+              <div>
+                <h3 className="text-lg font-semibold">Available Seats</h3>
+                <p className="text-gray-600">
+                  {availableSeats} out of {totalSeats} total seats
+                </p>
+              </div>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Preferred Time
-              </label>
-              <Select onValueChange={setSelectedTime}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select time" />
-                </SelectTrigger>
-                <SelectContent>
-                  {timeSlots.map((time) => (
-                    <SelectItem key={time} value={time}>
-                      {time}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Payment Method
-              </label>
-              <Select onValueChange={setPaymentMethod}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select payment method" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="personal">Personal Payment</SelectItem>
-                  <SelectItem value="manager">Manager Payment (Blu Dollars)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <Button
-              onClick={handleBooking}
-              className="w-full bg-ibm-blue hover:bg-blue-700 text-white"
-            >
-              Confirm Booking
-            </Button>
+            <span className="text-3xl font-bold text-ibm-blue">
+              {availableSeats}
+            </span>
           </div>
-        ) : (
-          <div className="text-center space-y-6">
-            <div className="bg-green-50 p-6 rounded-lg">
-              <h3 className="text-xl font-semibold text-green-800 mb-2">
-                Booking Confirmed!
-              </h3>
-              <p className="text-green-600">
-                {selectedSeats} seat(s) reserved for {selectedTime}
-              </p>
-              <p className="text-green-600 mt-2">
-                Payment Method: {paymentMethod === "manager" ? "Manager Payment (Blu Dollars)" : "Personal Payment"}
-              </p>
-            </div>
+        </div>
 
-            <Button
-              onClick={handleDone}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              Done with Lunch
-            </Button>
-          </div>
-        )}
+        {/* Booking Form */}
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-3xl font-bold text-ibm-dark mb-8 text-center">
+            Book Your Seat
+          </h2>
+
+          {!isBooked ? (
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Number of Seats
+                </label>
+                <Select onValueChange={setSelectedSeats}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select seats" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[1, 2, 3, 4].map((num) => (
+                      <SelectItem key={num} value={num.toString()}>
+                        {num} {num === 1 ? "seat" : "seats"}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Preferred Time
+                </label>
+                <Select onValueChange={setSelectedTime}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select time" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {timeSlots.map((time) => (
+                      <SelectItem key={time} value={time}>
+                        {time}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Payment Method
+                </label>
+                <Select onValueChange={setPaymentMethod}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select payment method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="personal">Personal Payment</SelectItem>
+                    <SelectItem value="manager">
+                      Manager Payment (Blu Dollars)
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Button
+                onClick={handleBooking}
+                className="w-full bg-ibm-blue hover:bg-blue-700 text-white"
+              >
+                Confirm Booking
+              </Button>
+            </div>
+          ) : (
+            <div className="text-center space-y-6">
+              <div className="bg-green-50 p-6 rounded-lg">
+                <h3 className="text-xl font-semibold text-green-800 mb-2">
+                  Booking Confirmed!
+                </h3>
+                <p className="text-green-600">
+                  {selectedSeats} seat(s) reserved for {selectedTime}
+                </p>
+                <p className="text-green-600 mt-2">
+                  Payment Method:{" "}
+                  {paymentMethod === "manager"
+                    ? "Manager Payment (Blu Dollars)"
+                    : "Personal Payment"}
+                </p>
+              </div>
+
+              <Button
+                onClick={handleDone}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                Done with Lunch
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
