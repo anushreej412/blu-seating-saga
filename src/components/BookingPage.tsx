@@ -9,6 +9,17 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Armchair } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+
+// Simulate fetching seats data - in a real app this would be an API call
+const fetchSeatsData = async () => {
+  // Simulate API delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  return {
+    totalSeats: 200,
+    availableSeats: Math.floor(Math.random() * 50) + 100, // Random number between 100-150
+  };
+};
 
 export const BookingPage = () => {
   const [selectedSeats, setSelectedSeats] = useState("");
@@ -16,9 +27,12 @@ export const BookingPage = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [isBooked, setIsBooked] = useState(false);
 
-  // This would typically come from your backend
-  const totalSeats = 200;
-  const availableSeats = 150;
+  // Fetch seats data with auto-refresh every 30 seconds
+  const { data: seatsData, isLoading } = useQuery({
+    queryKey: ["seats"],
+    queryFn: fetchSeatsData,
+    refetchInterval: 30000, // Refetch every 30 seconds
+  });
 
   const handleBooking = () => {
     if (!selectedSeats || !selectedTime || !paymentMethod) {
@@ -48,20 +62,24 @@ export const BookingPage = () => {
   return (
     <div className="container mx-auto px-4">
       <div className="max-w-2xl mx-auto">
-        {/* Available Seats Card */}
+        {/* Available Seats Card with real-time updates */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Armchair className="h-8 w-8 text-ibm-blue" />
               <div>
                 <h3 className="text-lg font-semibold">Available Seats</h3>
-                <p className="text-gray-600">
-                  {availableSeats} out of {totalSeats} total seats
-                </p>
+                {isLoading ? (
+                  <p className="text-gray-600">Loading...</p>
+                ) : (
+                  <p className="text-gray-600">
+                    {seatsData?.availableSeats} out of {seatsData?.totalSeats} total seats
+                  </p>
+                )}
               </div>
             </div>
             <span className="text-3xl font-bold text-ibm-blue">
-              {availableSeats}
+              {isLoading ? "..." : seatsData?.availableSeats}
             </span>
           </div>
         </div>
