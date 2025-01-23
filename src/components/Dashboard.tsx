@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { ChairIcon, Clock, Users } from "lucide-react";
+import { Armchair, Clock, Users } from "lucide-react";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ export const Dashboard = () => {
         <div className="grid md:grid-cols-3 gap-8 mb-12">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <div className="flex items-center justify-between mb-4">
-              <ChairIcon className="h-8 w-8 text-ibm-blue" />
+              <Armchair className="h-8 w-8 text-ibm-blue" />
               <span className="text-3xl font-bold text-ibm-blue">
                 {availableSeats}
               </span>
